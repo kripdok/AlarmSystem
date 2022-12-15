@@ -6,12 +6,6 @@ public class PlayerDetection : MonoBehaviour
     private float _volumeBooster = 0.1f;
     private float _volume = 0.0f;
 
-    private void Start()
-    {
-        _alarmSound.Play();
-        _alarmSound.volume = 0.0f;
-    }
-
     private void Update()
     {
         _alarmSound.volume += _volume * Time.deltaTime;
@@ -24,7 +18,16 @@ public class PlayerDetection : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        _volume = _volumeBooster;
+        if(collider.tag == "Player")
+        {
+            if(_alarmSound.isPlaying == false)
+            {
+                _alarmSound.Play();
+            }
+
+            _alarmSound.volume = 0.01f;
+            _volume = _volumeBooster;
+        }
     }
 
     private void OnTriggerExit(Collider collider)
