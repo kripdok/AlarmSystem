@@ -6,8 +6,10 @@ public class MoveController : MonoBehaviour
     [SerializeReference] private float _speed = 10f;
     [SerializeReference] private float _jumpHeight = 3f;
     private float _gravity = Physics.clothGravity.y;
+    private float _fallAcceleration = 2.0f;
+    private float _defoltVelocityY = -0.5f;
     private Vector3 _velocity;
-    private bool groundedPlayer;
+    private bool _isGrounded;
 
     private void Start()
     {
@@ -16,11 +18,11 @@ public class MoveController : MonoBehaviour
 
     void Update()
     {
-        groundedPlayer = _controller.isGrounded;
+        _isGrounded = _controller.isGrounded;
 
-        if (groundedPlayer && _velocity.y < 0f)
+        if (_isGrounded && _velocity.y < 0f)
         {
-            _velocity.y = -0.5f;
+            _velocity.y = _defoltVelocityY;
         }
 
         Runing();
@@ -30,9 +32,9 @@ public class MoveController : MonoBehaviour
 
     private void Jumping()
     {
-        if (Input.GetButtonDown("Jump") && groundedPlayer)
+        if (Input.GetButtonDown("Jump") && _isGrounded)
         {
-            _velocity.y += Mathf.Sqrt(_jumpHeight * -2.0f * _gravity);
+            _velocity.y += Mathf.Sqrt(_jumpHeight * -_fallAcceleration * _gravity);
         }
     }
 
@@ -46,7 +48,7 @@ public class MoveController : MonoBehaviour
 
     private void GoDown()
     {
-        _velocity.y += _gravity * 2f * Time.deltaTime;
+        _velocity.y += _gravity * _fallAcceleration * Time.deltaTime;
         _controller.Move(_velocity * Time.deltaTime);
     }
 }
