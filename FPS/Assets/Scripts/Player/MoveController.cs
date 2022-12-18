@@ -1,10 +1,12 @@
 using UnityEngine;
 
+[RequireComponent(typeof(CharacterController))]
+
 public class MoveController : MonoBehaviour
 {
-    private CharacterController _controller;
     [SerializeReference] private float _speed = 10f;
     [SerializeReference] private float _jumpHeight = 3f;
+    private CharacterController _controller;
     private float _gravity = Physics.clothGravity.y;
     private float _fallAcceleration = 2.0f;
     private float _defoltVelocityY = -0.5f;
@@ -16,7 +18,7 @@ public class MoveController : MonoBehaviour
         _controller = GetComponent<CharacterController>();
     }
 
-    void Update()
+    private void Update()
     {
         _isGrounded = _controller.isGrounded;
 

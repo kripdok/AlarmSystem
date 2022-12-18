@@ -1,37 +1,31 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerDetection : MonoBehaviour
 {
-    [SerializeReference] private AudioSource _alarmSound;
-    private float _volumeBooster = 0.1f;
-    private float _volume = 0.0f;
-
-    private void Update()
-    {
-        _alarmSound.volume += _volume * Time.deltaTime;
-
-        if (_alarmSound.volume == 0)
-        {
-            _alarmSound.Stop();
-        }
-    }
+    [SerializeReference] private GameObject _siren;
 
     private void OnTriggerEnter(Collider collider)
     {
-        if(collider.tag == "Player")
+        if (collider.TryGetComponent<Player>(out Player player))
         {
-            if(_alarmSound.isPlaying == false)
+            if (_siren.TryGetComponent<SirenPlayback>(out SirenPlayback sirenPlayback))
             {
-                _alarmSound.Play();
+                _siren.GetComponent<SirenPlayback>().StopCoroutine("TurnDownVolume");
+                _siren.GetComponent<SirenPlayback>().StartCoroutine("TurnUpVolume");
             }
-
-            _alarmSound.volume = 0.01f;
-            _volume = _volumeBooster;
         }
     }
 
     private void OnTriggerExit(Collider collider)
     {
-        _volume = -_volumeBooster;
+        if (collider.TryGetComponent<Player>(out Player player))
+        {
+            if (_siren.TryGetComponent<SirenPlayback>(out SirenPlayback sirenPlayback))
+            {
+                _siren.GetComponent<SirenPlayback>().StopCoroutine("TurnUpVolume");
+                _siren.GetComponent<SirenPlayback>().StartCoroutine("TurnDownVolume");
+            }
+        }    
     }
 }

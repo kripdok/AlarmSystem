@@ -1,17 +1,17 @@
 using UnityEngine;
 
-public class CameraСontrol : MonoBehaviour
+public class CameraControl : MonoBehaviour
 {
     [SerializeReference] private float _mouseSensivity = 100.0f;
     [SerializeReference] private Transform _playerBody;
     private float _xRotation = 0f;
 
-    void Start()
+    private void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    void Update()
+    private void Update()
     {
         float mouseX = Input.GetAxis("Mouse X") * _mouseSensivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * _mouseSensivity * Time.deltaTime;
