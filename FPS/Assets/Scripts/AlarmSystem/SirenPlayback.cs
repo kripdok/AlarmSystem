@@ -5,26 +5,31 @@ using UnityEngine;
 public class SirenPlayback : MonoBehaviour
 {
     [SerializeReference] private AudioSource _alarmSound;
+    [SerializeReference] private GameObject _triggerZone;
+    private PlayerDetection _detector;
     private float _volumeBooster = 0.1f;
     private float _minVolume = 0.0f;
-    private float _maxVolume = 1.0f;
 
     private void Start()
     {
         _alarmSound.volume = _minVolume;
+        _detector = _triggerZone.GetComponent<PlayerDetection>();
     }
 
     private void Update()
     {
-        if (_alarmSound.isPlaying == false)
+        StartCoroutine(AdjustVolume());
+
+        if (_alarmSound.volume == _minVolume)
         {
-            StopCoroutine(TurnDownVolume());
+            StopCoroutine(AdjustVolume());
+            _alarmSound.Stop();
         }
     }
 
-    IEnumerator TurnUpVolume()
+    private IEnumerator AdjustVolume()
     {
-        while (_alarmSound.volume < _maxVolume)
+        if (_detector.IsInside)
         {
             if (_alarmSound.isPlaying == false)
             {
@@ -32,22 +37,12 @@ public class SirenPlayback : MonoBehaviour
             }
 
             _alarmSound.volume += _volumeBooster * Time.deltaTime;
-            yield return null;
         }
-    }
-
-    IEnumerator TurnDownVolume()
-    {
-        while (_alarmSound.volume > _minVolume)
+        else
         {
             _alarmSound.volume -= _volumeBooster * Time.deltaTime;
-
-            if (_alarmSound.volume == 0.0f)
-            {
-                _alarmSound.Stop();
-            }
-
-            yield return null;
         }
+
+        yield return null;
     }
 }

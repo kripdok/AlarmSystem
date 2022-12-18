@@ -1611,6 +1611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _alarmSound: {fileID: 846803967}
+  _triggerZone: {fileID: 2011397711}
 --- !u!82 &846803967
 AudioSource:
   m_ObjectHideFlags: 0
@@ -4762,7 +4763,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh17326
+  m_Name: pb_Mesh17336
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -7164,7 +7165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d431f91301fe894db7c68f6a155a103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _siren: {fileID: 846803964}
 --- !u!65 &2011397714
 BoxCollider:
   m_ObjectHideFlags: 0

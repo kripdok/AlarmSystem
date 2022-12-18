@@ -1,31 +1,28 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 public class PlayerDetection : MonoBehaviour
 {
-    [SerializeReference] private GameObject _siren;
+    public bool IsInside { get { return _isWork; } }
+    private bool _isWork;
 
     private void OnTriggerEnter(Collider collider)
     {
-        if (collider.TryGetComponent<Player>(out Player player))
+        if (CheckColliderComponent(collider))
         {
-            if (_siren.TryGetComponent<SirenPlayback>(out SirenPlayback sirenPlayback))
-            {
-                _siren.GetComponent<SirenPlayback>().StopCoroutine("TurnDownVolume");
-                _siren.GetComponent<SirenPlayback>().StartCoroutine("TurnUpVolume");
-            }
+            _isWork = true;
         }
     }
 
     private void OnTriggerExit(Collider collider)
     {
-        if (collider.TryGetComponent<Player>(out Player player))
+        if (CheckColliderComponent(collider))
         {
-            if (_siren.TryGetComponent<SirenPlayback>(out SirenPlayback sirenPlayback))
-            {
-                _siren.GetComponent<SirenPlayback>().StopCoroutine("TurnUpVolume");
-                _siren.GetComponent<SirenPlayback>().StartCoroutine("TurnDownVolume");
-            }
-        }    
+            _isWork = false;
+        }
+    }
+
+    private bool CheckColliderComponent(Collider collider)
+    {
+        return (collider.TryGetComponent<Player>(out Player player));
     }
 }
