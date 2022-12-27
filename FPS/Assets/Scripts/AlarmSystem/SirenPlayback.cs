@@ -5,31 +5,50 @@ using UnityEngine;
 public class SirenPlayback : MonoBehaviour
 {
     [SerializeReference] private AudioSource _alarmSound;
-    [SerializeReference] private GameObject _triggerZone;
-    private PlayerDetection _detector;
-    private float _volumeBooster = 0.1f;
+    [SerializeReference] private AlarmSystemEvent _detectorEvent;
+    private float _volumeBooster;
     private float _minVolume = 0.0f;
 
     private void Start()
     {
         _alarmSound.volume = _minVolume;
-        _detector = _triggerZone.GetComponent<PlayerDetection>();
     }
 
-    private void Update()
+    private void OnEnable()
     {
+        _detectorEvent.OnPlayerDetect += TurnUpVolume;
+        _detectorEvent.OnPlayerLose += TurnDownVolume;
+    }
+
+    private void OnDisable()
+    {
+        _detectorEvent.OnPlayerDetect -= TurnUpVolume;
+        _detectorEvent.OnPlayerLose -= TurnDownVolume;
+    }
+
+    private void TurnUpVolume()
+    {
+        _volumeBooster = 0.05f;
         StartCoroutine(AdjustVolume());
+    }
+
+    private void TurnDownVolume()
+    {
+        _volumeBooster = -0.05f;
 
         if (_alarmSound.volume == _minVolume)
         {
-            StopCoroutine(AdjustVolume());
             _alarmSound.Stop();
+            StopCoroutine(AdjustVolume());
+            OnDisable();
         }
     }
 
     private IEnumerator AdjustVolume()
     {
-        if (_detector.IsInside)
+        bool isWork = true;
+
+        while (isWork)
         {
             if (_alarmSound.isPlaying == false)
             {
@@ -37,12 +56,7 @@ public class SirenPlayback : MonoBehaviour
             }
 
             _alarmSound.volume += _volumeBooster * Time.deltaTime;
+            yield return null;
         }
-        else
-        {
-            _alarmSound.volume -= _volumeBooster * Time.deltaTime;
-        }
-
-        yield return null;
     }
 }

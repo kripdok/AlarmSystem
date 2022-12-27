@@ -1,15 +1,16 @@
+using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PlayerDetection : MonoBehaviour
 {
-    public bool IsInside { get { return _isWork; } }
-    private bool _isWork;
+    [SerializeReference]private AlarmSystemEvent _detectorEvent;
 
     private void OnTriggerEnter(Collider collider)
     {
         if (CheckColliderComponent(collider))
         {
-            _isWork = true;
+            _detectorEvent.DetectPlayer();
         }
     }
 
@@ -17,7 +18,7 @@ public class PlayerDetection : MonoBehaviour
     {
         if (CheckColliderComponent(collider))
         {
-            _isWork = false;
+            _detectorEvent.LosePlayer();
         }
     }
 
