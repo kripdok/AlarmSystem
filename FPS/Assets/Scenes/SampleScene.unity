@@ -1610,8 +1610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e2f876a030904148bc7f843b59550d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _alarmSound: {fileID: 846803967}
-  _detectorEvent: {fileID: 952316083}
+  _detector: {fileID: 2011397713}
 --- !u!82 &846803967
 AudioSource:
   m_ObjectHideFlags: 0
@@ -2173,7 +2172,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 952316082}
-  - component: {fileID: 952316083}
   m_Layer: 0
   m_Name: AlarmSystem
   m_TagString: Untagged
@@ -2197,18 +2195,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &952316083
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 952316081}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbe5966081b24844192a49c5dc8daaf6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -7178,7 +7164,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d431f91301fe894db7c68f6a155a103, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _detectorEvent: {fileID: 952316083}
 --- !u!65 &2011397714
 BoxCollider:
   m_ObjectHideFlags: 0

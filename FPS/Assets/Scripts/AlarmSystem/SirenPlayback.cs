@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class SirenPlayback : MonoBehaviour
 {    
-    [SerializeReference] private AlarmSystemEvent _detectorEvent;
+    [SerializeReference] private Detector _detector;
 
     private Coroutine _volumeController;
     private AudioSource _alarmSound;
@@ -21,14 +21,14 @@ public class SirenPlayback : MonoBehaviour
 
     private void OnEnable()
     {
-        _detectorEvent.OnPlayerDetect += TurnUpVolume;
-        _detectorEvent.OnPlayerLose += TurnDownVolume;
+        _detector.OnPlayerDetect += TurnUpVolume;
+        _detector.OnPlayerLose += TurnDownVolume;
     }
 
     private void OnDisable()
     {
-        _detectorEvent.OnPlayerDetect -= TurnUpVolume;
-        _detectorEvent.OnPlayerLose -= TurnDownVolume;
+        _detector.OnPlayerDetect -= TurnUpVolume;
+        _detector.OnPlayerLose -= TurnDownVolume;
     }
 
     private void TurnUpVolume()
@@ -53,21 +53,20 @@ public class SirenPlayback : MonoBehaviour
 
     private IEnumerator AdjustVolume(float target)
     {
+        if (_alarmSound.isPlaying == false)
+        {
+            _alarmSound.Play();
+        }
+
         while (_alarmSound.volume != target)
         {
-            if (_alarmSound.isPlaying == false)
-            {
-                _alarmSound.Play();
-            }
-
             _alarmSound.volume = Mathf.MoveTowards(_alarmSound.volume, target, _volumeBooster * Time.deltaTime);
-
-            if (_alarmSound.volume == _minVolume)
-            {
-                _alarmSound.Stop();
-            }
-
             yield return null;
+        }
+
+        if (_alarmSound.volume == _minVolume)
+        {
+            _alarmSound.Stop();
         }
     }
 }
