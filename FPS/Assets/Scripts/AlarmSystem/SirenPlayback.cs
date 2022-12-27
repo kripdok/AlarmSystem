@@ -2,15 +2,20 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
+
 public class SirenPlayback : MonoBehaviour
-{
-    [SerializeReference] private AudioSource _alarmSound;
+{    
     [SerializeReference] private AlarmSystemEvent _detectorEvent;
-    private float _volumeBooster;
+
+    private Coroutine _volumeController;
+    private AudioSource _alarmSound;
+    private float _volumeBooster = 0.1f;
+    private float _maxVolume = 1.0f;
     private float _minVolume = 0.0f;
 
     private void Start()
     {
+        _alarmSound= GetComponent<AudioSource>();
         _alarmSound.volume = _minVolume;
     }
 
@@ -28,34 +33,40 @@ public class SirenPlayback : MonoBehaviour
 
     private void TurnUpVolume()
     {
-        _volumeBooster = 0.05f;
-        StartCoroutine(AdjustVolume());
+        TurnVolume(_maxVolume);
     }
 
     private void TurnDownVolume()
     {
-        _volumeBooster = -0.05f;
-
-        if (_alarmSound.volume == _minVolume)
-        {
-            _alarmSound.Stop();
-            StopCoroutine(AdjustVolume());
-            OnDisable();
-        }
+        TurnVolume(_minVolume);
     }
 
-    private IEnumerator AdjustVolume()
+    private void TurnVolume(float volume)
     {
-        bool isWork = true;
+        if (_volumeController != null)
+        {
+            StopCoroutine(_volumeController);
+        }
 
-        while (isWork)
+        _volumeController = StartCoroutine(AdjustVolume(volume));
+    }
+
+    private IEnumerator AdjustVolume(float target)
+    {
+        while (_alarmSound.volume != target)
         {
             if (_alarmSound.isPlaying == false)
             {
                 _alarmSound.Play();
             }
 
-            _alarmSound.volume += _volumeBooster * Time.deltaTime;
+            _alarmSound.volume = Mathf.MoveTowards(_alarmSound.volume, target, _volumeBooster * Time.deltaTime);
+
+            if (_alarmSound.volume == _minVolume)
+            {
+                _alarmSound.Stop();
+            }
+
             yield return null;
         }
     }
