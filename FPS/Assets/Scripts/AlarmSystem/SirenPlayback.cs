@@ -21,14 +21,14 @@ public class SirenPlayback : MonoBehaviour
 
     private void OnEnable()
     {
-        _detector.OnPlayerDetect += TurnUpVolume;
-        _detector.OnPlayerLose += TurnDownVolume;
+        _detector.FoundPlayer += TurnUpVolume;
+        _detector.LostPlayer += TurnDownVolume;
     }
 
     private void OnDisable()
     {
-        _detector.OnPlayerDetect -= TurnUpVolume;
-        _detector.OnPlayerLose -= TurnDownVolume;
+        _detector.FoundPlayer -= TurnUpVolume;
+        _detector.LostPlayer -= TurnDownVolume;
     }
 
     private void TurnUpVolume()

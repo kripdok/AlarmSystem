@@ -3,14 +3,14 @@ using UnityEngine;
 
 public class Detector : MonoBehaviour
 {
-    public event Action OnPlayerDetect;
-    public event Action OnPlayerLose;
+    public event Action FoundPlayer;
+    public event Action LostPlayer;
 
     private void OnTriggerEnter(Collider collider)
     {
         if (CheckColliderComponent(collider))
         {
-            RunAction(OnPlayerDetect);
+            RunAction(FoundPlayer);
         }
     }
 
@@ -18,7 +18,7 @@ public class Detector : MonoBehaviour
     {
         if (CheckColliderComponent(collider))
         {
-            RunAction(OnPlayerLose);
+            RunAction(LostPlayer);
         }
     }
 
